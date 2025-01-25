@@ -8,15 +8,25 @@ const orderApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    // updateProfile: builder.mutation({
-    //   query: (payload) => ({
-    //     url: "/users/update-user",
-    //     method: "PATCH",
-    //     body: payload,
-    //   }),
-
-    // }),
+    getAllOrders: builder.query({
+      query: () => ({
+        url: "/orders",
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
+    }),
+    approveOrder: builder.mutation({
+      query: (id) => ({
+        url: `/orders/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Orders"],
+    }),
   }),
 });
 
-export const { useMyOdersQuery } = orderApi;
+export const {
+  useMyOdersQuery,
+  useGetAllOrdersQuery,
+  useApproveOrderMutation,
+} = orderApi;

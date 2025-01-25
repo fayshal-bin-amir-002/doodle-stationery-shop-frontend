@@ -31,51 +31,54 @@ const ManageUsers = () => {
   };
 
   return (
-    <Card className="p-4">
-      <Table>
-        <TableHeader>
-          <TableRow className="">
-            <TableHead className="">Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users &&
-            users.map((user: any, i: number) => (
-              <TableRow key={i} className="">
-                <TableCell>{user?.name}</TableCell>
-                <TableCell>{user?.email}</TableCell>
-                <TableCell>
-                  {user?.role === "admin" ? (
-                    <Badge>{user?.role}</Badge>
-                  ) : (
-                    user?.role
-                  )}
-                </TableCell>
-                <TableCell
-                  className={`${
-                    user?.isBlocked ? "text-red-500" : "text-green-500"
-                  }`}
-                >
-                  {user?.isBlocked ? "Blocked" : "Active"}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => handleBlock(user?.email)}
-                    disabled={user?.isBlocked}
-                    className="bg-red-500"
+    <div className="overflow-x-auto">
+      <Card className="p-4 w-full">
+        <Table>
+          <TableHeader>
+            <TableRow className="">
+              <TableHead className="">Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users &&
+              users.map((user: any, i: number) => (
+                <TableRow key={i} className="">
+                  <TableCell>{user?.name}</TableCell>
+                  <TableCell>{user?.email}</TableCell>
+                  <TableCell>
+                    {user?.role === "admin" ? (
+                      <Badge>{user?.role}</Badge>
+                    ) : (
+                      user?.role
+                    )}
+                  </TableCell>
+                  <TableCell
+                    className={`${
+                      user?.isBlocked ? "text-red-500" : "text-green-500"
+                    }`}
                   >
-                    Block
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-    </Card>
+                    {user?.isBlocked ? "Blocked" : "Active"}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="sm"
+                      onClick={() => handleBlock(user?.email)}
+                      disabled={user?.isBlocked}
+                      className="bg-red-500"
+                    >
+                      Block
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </Card>
+    </div>
   );
 };
 

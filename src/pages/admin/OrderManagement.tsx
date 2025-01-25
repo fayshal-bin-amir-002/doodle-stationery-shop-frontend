@@ -1,4 +1,7 @@
-import { useMyOdersQuery } from "@/redux/features/order/orderApi";
+import {
+  useApproveOrderMutation,
+  useGetAllOrdersQuery,
+} from "@/redux/features/order/orderApi";
 
 import {
   Table,
@@ -10,11 +13,23 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
-const UserOrders = () => {
-  const { data } = useMyOdersQuery(undefined);
+const OrderManagement = () => {
+  const { data } = useGetAllOrdersQuery(undefined);
+  const [approveOrder] = useApproveOrderMutation();
 
   const orders = data?.data?.data || [];
+
+  const handleApprove = async (id: string) => {
+    try {
+      await approveOrder(id);
+      toast.success("Order approved successfully!");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to approve order!");
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -22,17 +37,22 @@ const UserOrders = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="">Product Name</TableHead>
+              <TableHead>Customer Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Product Name</TableHead>
               <TableHead>Quantity</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Total Amount</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orders &&
               orders.map((order: any, i: number) => (
                 <TableRow key={i}>
+                  <TableCell>{order?.user?.name}</TableCell>
+                  <TableCell>{order?.user?.email}</TableCell>
                   <TableCell className="font-medium">
                     {order?.products?.map((product: any) => (
                       <p key={product?._id}>{product?.product?.name}</p>
@@ -58,6 +78,15 @@ const UserOrders = () => {
                       {order?.status}
                     </Badge>
                   </TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => handleApprove(order?._id)}
+                      disabled={order?.status !== "Pending"}
+                      size="sm"
+                    >
+                      Approve
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -67,4 +96,4 @@ const UserOrders = () => {
   );
 };
 
-export default UserOrders;
+export default OrderManagement;

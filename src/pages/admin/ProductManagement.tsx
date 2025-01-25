@@ -32,6 +32,15 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import DoodleInput from "@/components/form/DoodleInput";
 import DoodleSelect from "@/components/form/DoodleSelect";
 import { toast } from "sonner";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
 
 const categories = [
   { label: "Writing", value: "Writing" },
@@ -45,10 +54,17 @@ const categories = [
 ];
 
 const ProductManagement = () => {
-  const { data } = useGetAllProductsQuery(undefined);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const { data } = useGetAllProductsQuery({ page, search });
   const [deleteProduct] = useDeleteProductMutation();
   const products = data?.data?.data || [];
+  const meta = data?.data?.meta || {};
 
+  const pageNumbers = Array.from(
+    { length: meta?.totalPage },
+    (_, index) => index
+  );
   const handleDeleteProduct = async (id: string) => {
     try {
       await deleteProduct(id);
@@ -57,13 +73,32 @@ const ProductManagement = () => {
       toast.error("Failed to delete product!");
     }
   };
+  const handleSearch: SubmitHandler<FieldValues> = (e) => {
+    e.preventDefault();
+    setSearch(e.target.search.value);
+    setPage(1);
+  };
 
   return (
-    <div>
-      <div className="flex justify-end my-4">
+    <div className="overflow-x-auto">
+      <div className="flex justify-between my-4">
+        <div>
+          <form onSubmit={handleSearch}>
+            <div className="flex items-center gap-2 px-1">
+              <Input
+                name="search"
+                placeholder="Search your product"
+                type="search"
+              />
+              <Button size="sm" type="submit">
+                Search
+              </Button>
+            </div>
+          </form>
+        </div>
         <ProductAddModal />
       </div>
-      <Card className="p-4">
+      <Card className="p-4 w-full">
         <Table>
           <TableHeader>
             <TableRow className="">
@@ -108,6 +143,43 @@ const ProductManagement = () => {
           </TableBody>
         </Table>
       </Card>
+      <div className="my-5 flex justify-center items-center">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className="cursor-pointer"
+                onClick={() => {
+                  if (page > 1) {
+                    setPage(page - 1);
+                  }
+                }}
+              />
+            </PaginationItem>
+            {pageNumbers &&
+              pageNumbers.map((i) => (
+                <PaginationItem className="cursor-pointer" key={i}>
+                  <PaginationLink
+                    onClick={() => setPage(i + 1)}
+                    isActive={page === i + 1}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+            <PaginationItem>
+              <PaginationNext
+                className="cursor-pointer"
+                onClick={() => {
+                  if (page < pageNumbers?.length) {
+                    setPage(page + 1);
+                  }
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
     </div>
   );
 };
