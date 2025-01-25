@@ -1,11 +1,11 @@
-import Hero from "@/components/Home/Hero";
 import NavBar from "@/components/shared/NavBar";
+import { Outlet } from "react-router";
 
 const MainLayout = () => {
   return (
     <div>
       <NavBar />
-      <Hero />
+      <Outlet />
     </div>
   );
 };
