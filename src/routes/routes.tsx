@@ -1,6 +1,8 @@
 import App from "@/App";
 import Dashboard from "@/layout/Dashboard";
 import ProtectedRoute from "@/layout/ProtectedRoute";
+import ManageUsers from "@/pages/admin/ManageUsers";
+import ProductManagement from "@/pages/admin/ProductManagement";
 import AdminDashboard from "@/pages/AdminDashboard";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AdminDashboard />,
+      },
+      {
+        path: "users",
+        element: <ManageUsers />,
+      },
+      {
+        path: "products",
+        element: <ProductManagement />,
       },
     ],
   },

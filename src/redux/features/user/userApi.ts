@@ -17,7 +17,26 @@ const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Profile"],
     }),
+    getAllUsers: builder.query({
+      query: () => ({
+        url: "/users//get-all-users",
+        method: "GET",
+      }),
+      providesTags: ["Users"],
+    }),
+    blockUser: builder.mutation({
+      query: (email) => ({
+        url: `/users/block-user/${email}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Users"],
+    }),
   }),
 });
 
-export const { useGetMeQuery, useUpdateProfileMutation } = userApi;
+export const {
+  useGetMeQuery,
+  useUpdateProfileMutation,
+  useGetAllUsersQuery,
+  useBlockUserMutation,
+} = userApi;
