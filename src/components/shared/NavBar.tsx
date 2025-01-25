@@ -13,7 +13,7 @@ import { Menu } from "lucide-react";
 
 const NavBar = () => {
   return (
-    <nav className="py-4 bg-slate-50 sticky top-0">
+    <nav className="py-4 sticky top-0">
       <Container>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -21,8 +21,8 @@ const NavBar = () => {
               <NavSheet />
             </div>
             <Link to="/">
-              <h3 className="text-cPrimary text-2xl font-semibold">
-                Doodle. SS
+              <h3 className=" text-2xl font-semibold">
+                Doodle<span className="text-cPrimary">. SS</span>
               </h3>
             </Link>
           </div>

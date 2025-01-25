@@ -7,13 +7,8 @@ export default {
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
-      },
       colors: {
-        cPrimary: "#e11d48"
+        cPrimary: "#e11d48",
       }
     }
   },
