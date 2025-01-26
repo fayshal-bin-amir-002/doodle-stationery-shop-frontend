@@ -53,7 +53,7 @@ const NavBar = () => {
               <NavSheet />
             </div>
             <NavLink to="/">
-              <h3 className=" text-2xl font-semibold">
+              <h3 className="text-2xl md:text-3xl font-bold">
                 Doodle<span className="text-cPrimary">. SS</span>
               </h3>
             </NavLink>
