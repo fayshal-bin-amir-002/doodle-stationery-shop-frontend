@@ -12,7 +12,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const UserOrders = () => {
-  const { data } = useMyOdersQuery(undefined);
+  const { data } = useMyOdersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const orders = data?.data?.data || [];
 

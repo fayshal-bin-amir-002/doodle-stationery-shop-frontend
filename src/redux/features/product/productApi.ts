@@ -3,13 +3,24 @@ import { baseApi } from "../../api/baseApi";
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ page, search }) => {
+      query: ({ page, search, filterData }) => {
         const params = new URLSearchParams();
         if (page) params.append("page", String(page));
         if (search) params.append("searchTerm", String(search));
+        if (filterData?.category)
+          params.append("category", filterData?.category);
+        if (filterData?.range > 0)
+          params.append("price", String(filterData?.range));
+
+        if (filterData?.instock !== "" && filterData?.instock !== undefined) {
+          params.append("inStock", filterData?.instock);
+        }
+        // params.append("price", String(filterData?.range));
+        // console.log(params);
         return {
-          url: `/products?${params.toString()}`,
+          url: `/products`,
           method: "GET",
+          params: params,
         };
       },
       providesTags: ["Products"],

@@ -17,7 +17,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const OrderManagement = () => {
-  const { data } = useGetAllOrdersQuery(undefined);
+  const { data } = useGetAllOrdersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [approveOrder] = useApproveOrderMutation();
 
   const orders = data?.data?.data || [];

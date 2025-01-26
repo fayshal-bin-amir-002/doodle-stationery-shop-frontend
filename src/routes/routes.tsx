@@ -7,6 +7,8 @@ import ProductManagement from "@/pages/admin/ProductManagement";
 import AdminDashboard from "@/pages/AdminDashboard";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import Product from "@/pages/Product";
+import Products from "@/pages/Products";
 import Profile from "@/pages/Profile";
 import UserOrders from "@/pages/user/UserOrders";
 import UserDashboard from "@/pages/UserDashboard";
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "products",
+        element: <Products />,
+      },
+      {
+        path: "products/:id",
+        element: <Product />,
       },
       {
         path: "profile",
