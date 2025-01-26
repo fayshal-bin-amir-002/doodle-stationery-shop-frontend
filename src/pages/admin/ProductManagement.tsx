@@ -15,7 +15,7 @@ import {
   useGetAProductQuery,
   useUpdateProductMutation,
 } from "@/redux/features/product/productApi";
-import { SquarePlus } from "lucide-react";
+import { Loader2, SquarePlus } from "lucide-react";
 
 import {
   Dialog,
@@ -56,12 +56,7 @@ const categories = [
 const ProductManagement = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { data } = useGetAllProductsQuery(
-    { page, search },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data } = useGetAllProductsQuery({ page, search });
   const [deleteProduct] = useDeleteProductMutation();
   const products = data?.data?.data || [];
   const meta = data?.data?.meta || {};
@@ -213,11 +208,9 @@ const ProductDetailsModal = ({ id }: { id: string }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Product Details</DialogTitle>
-          <DialogDescription>
-            View detailed information about this product.
-          </DialogDescription>
+          <DialogDescription>{isLoading && "Please wait..."}</DialogDescription>
         </DialogHeader>
-        {!isLoading && product ? (
+        {!isLoading && product && (
           <div className="space-y-2">
             <img src={product?.image_url} alt="image" />
             <p>
@@ -244,8 +237,6 @@ const ProductDetailsModal = ({ id }: { id: string }) => {
               {new Date(product.createdAt).toLocaleDateString()}
             </p>
           </div>
-        ) : (
-          <p>No product details available.</p>
         )}
         <DialogFooter>
           <Button type="button" onClick={() => setOpen(false)}>
@@ -258,7 +249,7 @@ const ProductDetailsModal = ({ id }: { id: string }) => {
 };
 
 const ProductUpdateModal = ({ id }: { id: string }) => {
-  const [updateProduct] = useUpdateProductMutation();
+  const [updateProduct, { isLoading }] = useUpdateProductMutation();
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<FieldValues> = async (updatedData) => {
@@ -295,7 +286,9 @@ const ProductUpdateModal = ({ id }: { id: string }) => {
         <DoodleForm onSubmit={onSubmit}>
           <DoodleInput name="price" label="Price" type="text" />
           <DoodleInput name="quantity" label="Quantity" type="text" />
-          <Button type="submit">Update</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="animate-spin" />}Update
+          </Button>
         </DoodleForm>
       </DialogContent>
     </Dialog>
@@ -303,7 +296,7 @@ const ProductUpdateModal = ({ id }: { id: string }) => {
 };
 
 const ProductAddModal = () => {
-  const [addProduct] = useAddProductMutation();
+  const [addProduct, { isLoading }] = useAddProductMutation();
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -316,7 +309,7 @@ const ProductAddModal = () => {
     try {
       await addProduct(transformedData);
       toast.success("Product added successfully");
-      setOpen(false);
+      !isLoading && setOpen(false);
     } catch (err: any) {
       toast.error(err?.data?.message || "Something went wrong");
     }
@@ -342,7 +335,9 @@ const ProductAddModal = () => {
           <DoodleInput name="quantity" type="text" label="Quantity" />
           <DoodleInput name="description" type="text" label="Description" />
           <DoodleInput name="image_url" type="text" label="Image Link" />
-          <Button type="submit">Add Product</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="animate-spin" />} Add Product
+          </Button>
         </DoodleForm>
       </DialogContent>
     </Dialog>

@@ -1,6 +1,8 @@
 import ProductCard from "@/components/Home/ProductCard";
+import ProductCardSkeleton from "@/components/Loader/ProductCardSkeleton";
 import FilterSheet from "@/components/products/FilterSheet";
 import Container from "@/components/shared/Container";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,16 +26,11 @@ const Products = () => {
     category: "",
     instock: "",
   });
-  const { data, isLoading } = useGetAllProductsQuery(
-    {
-      page,
-      search,
-      filterData,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data, isLoading, isFetching } = useGetAllProductsQuery({
+    page,
+    search,
+    filterData,
+  });
   const products = data?.data?.data || [];
   const meta = data?.data?.meta || {};
   const pageNumbers = Array.from(
@@ -47,9 +44,26 @@ const Products = () => {
     setPage(1);
   };
 
-  // console.log(filterData);
+  let content = null;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || isFetching) {
+    content = <ProductCardSkeleton />;
+  }
+
+  if (!isLoading && products.length === 0) {
+    content = <NotFoundItem title="Products not found" />;
+  }
+
+  if (!isLoading && products.length > 0) {
+    content = (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        {products &&
+          products.map((product: any) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+      </div>
+    );
+  }
 
   return (
     <div className="my-8 md:my-10 lg:my-12">
@@ -77,15 +91,7 @@ const Products = () => {
             />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {products.length > 0 ? (
-            products.map((product: any) => (
-              <ProductCard key={product._id} product={product} />
-            ))
-          ) : (
-            <div className="text-3xl">No Product Found!</div>
-          )}
-        </div>
+        <div>{content}</div>
         {products.length > 0 && (
           <div className="my-5 flex justify-center items-center">
             <Pagination>

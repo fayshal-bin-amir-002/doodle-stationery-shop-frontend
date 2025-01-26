@@ -22,6 +22,7 @@ const Product = () => {
   const handleAddToCart = () => {
     if (!user) {
       navigate("/login");
+      return;
     }
     dispatch(
       addToCart({
