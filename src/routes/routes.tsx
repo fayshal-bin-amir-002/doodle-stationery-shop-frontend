@@ -12,7 +12,6 @@ import Product from "@/pages/Product";
 import Products from "@/pages/Products";
 import Profile from "@/pages/Profile";
 import UserOrders from "@/pages/user/UserOrders";
-import UserDashboard from "@/pages/UserDashboard";
 import { createBrowserRouter } from "react-router";
 
 const router = createBrowserRouter([
@@ -83,10 +82,6 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <UserDashboard />,
-      },
-      {
-        path: "orders",
         element: <UserOrders />,
       },
     ],

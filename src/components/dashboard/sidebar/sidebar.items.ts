@@ -16,15 +16,8 @@ export const userSidebarItems = [
     isActive: true,
   },
   {
-    title: "Dashboard",
-    url: `/user/dashboard`,
-    icon: LayoutDashboard,
-    isNotCollapsible: true,
-    isActive: true,
-  },
-  {
     title: "My Oders",
-    url: `/user/dashboard/orders`,
+    url: `/user/dashboard`,
     icon: ListOrdered,
     isNotCollapsible: true,
     isActive: true,
