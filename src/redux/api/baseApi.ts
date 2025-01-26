@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
+import { logout } from "../features/auth/authSlice"; // Import your logout action
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:9000/api",
@@ -15,9 +16,21 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// Create a custom base query to handle 401/403 status codes
+const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result?.error?.status === 401 || result?.error?.status === 403) {
+    // Dispatch the logout action
+    api.dispatch(logout());
+  }
+
+  return result;
+};
+
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: baseQuery,
+  baseQuery: baseQueryWithReauth,
   tagTypes: ["Profile", "Users", "Products", "Orders", "My-Order"],
   endpoints: () => ({}),
 });

@@ -64,7 +64,7 @@ const NavBar = () => {
                 Products
               </Button>
             </NavLink>
-            <NavLink to="/">
+            <NavLink to="/about-us">
               <Button variant="link" className="text-lg font-medium">
                 About Us
               </Button>
@@ -108,7 +108,7 @@ const NavSheet = () => {
                   Products
                 </Button>
               </NavLink>
-              <NavLink to="/">
+              <NavLink to="/about-us">
                 <Button variant="link" className="text-lg font-medium">
                   About Us
                 </Button>
