@@ -46,7 +46,7 @@ const Products = () => {
 
   let content = null;
 
-  if (isLoading || isFetching) {
+  if (isFetching || isLoading) {
     content = <ProductCardSkeleton />;
   }
 
