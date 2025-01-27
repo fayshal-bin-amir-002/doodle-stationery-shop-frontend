@@ -41,6 +41,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
+import TableLoader from "@/components/Loader/TableLoader";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const categories = [
   { label: "Writing", value: "Writing" },
@@ -56,7 +58,10 @@ const categories = [
 const ProductManagement = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { data } = useGetAllProductsQuery({ page, search });
+  const { data, isLoading, isFetching } = useGetAllProductsQuery({
+    page,
+    search,
+  });
   const [deleteProduct] = useDeleteProductMutation();
   const products = data?.data?.data || [];
   const meta = data?.data?.meta || {};
@@ -110,37 +115,64 @@ const ProductManagement = () => {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {products &&
-              products.map((product: any, i: number) => (
-                <TableRow key={i} className="">
-                  <TableCell>{product?.name}</TableCell>
-                  <TableCell>{product?.category}</TableCell>
-                  <TableCell>{product?.price}$</TableCell>
-                  <TableCell>{product?.quantity}</TableCell>
-                  <TableCell
-                    className={`${
-                      product?.inStock ? "text-green-500" : "text-red-500"
-                    }`}
-                  >
-                    {product?.inStock ? "Available" : "Not Available"}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-1.5 items-center flex-col lg:flex-row">
-                      <ProductDetailsModal id={product?._id} />
-                      <ProductUpdateModal id={product?._id} />
-                      <Button
-                        onClick={() => handleDeleteProduct(product?._id)}
-                        size="sm"
-                        className="bg-red-500"
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+          {isFetching || isLoading ? (
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (!isFetching || !isLoading) && products.length === 0 ? (
+            <NotFoundItem title="No data available" />
+          ) : (
+            <TableBody>
+              {products &&
+                products.map((product: any, i: number) => (
+                  <TableRow key={i} className="">
+                    <TableCell>{product?.name}</TableCell>
+                    <TableCell>{product?.category}</TableCell>
+                    <TableCell>{product?.price}$</TableCell>
+                    <TableCell>{product?.quantity}</TableCell>
+                    <TableCell
+                      className={`${
+                        product?.inStock ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {product?.inStock ? "Available" : "Not Available"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1.5 items-center flex-col lg:flex-row">
+                        <ProductDetailsModal id={product?._id} />
+                        <ProductUpdateModal id={product?._id} />
+                        <Button
+                          onClick={() => handleDeleteProduct(product?._id)}
+                          size="sm"
+                          className="bg-red-500"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          )}
         </Table>
       </Card>
       <div className="my-5 flex justify-center items-center">

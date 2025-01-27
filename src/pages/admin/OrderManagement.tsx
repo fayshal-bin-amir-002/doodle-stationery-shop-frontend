@@ -15,11 +15,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import TableLoader from "@/components/Loader/TableLoader";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const OrderManagement = () => {
-  const { data } = useGetAllOrdersQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading, isFetching } = useGetAllOrdersQuery(undefined);
   const [approveOrder] = useApproveOrderMutation();
 
   const orders = data?.data?.data || [];
@@ -49,9 +49,40 @@ const OrderManagement = () => {
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {orders &&
-              orders.map((order: any, i: number) => (
+          {isFetching || isLoading ? (
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (!isFetching || !isLoading) && orders.length === 0 ? (
+            <NotFoundItem title="No Orders" />
+          ) : (
+            <TableBody>
+              {orders.map((order: any, i: number) => (
                 <TableRow key={i}>
                   <TableCell>{order?.user?.name}</TableCell>
                   <TableCell>{order?.user?.email}</TableCell>
@@ -91,7 +122,8 @@ const OrderManagement = () => {
                   </TableCell>
                 </TableRow>
               ))}
-          </TableBody>
+            </TableBody>
+          )}
         </Table>
       </Card>
     </div>

@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import TableLoader from "@/components/Loader/TableLoader";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const UserOrders = () => {
-  const { data } = useMyOdersQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading, isFetching } = useMyOdersQuery(undefined);
 
   const orders = data?.data?.data || [];
 
@@ -24,45 +24,69 @@ const UserOrders = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="">Product Name</TableHead>
+              <TableHead>Product Name</TableHead>
               <TableHead>Quantity</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Total Amount</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {orders &&
-              orders.map((order: any, i: number) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium">
-                    {order?.products?.map((product: any) => (
-                      <p key={product?._id}>{product?.product?.name}</p>
-                    ))}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {order?.products?.map((product: any) => (
-                      <p key={product?._id}>{product?.quantity}</p>
-                    ))}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {order?.products?.map((product: any) => (
-                      <p key={product?._id}>{product?.product?.price}$</p>
-                    ))}
-                  </TableCell>
-                  <TableCell>{order?.totalPrice}$</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`${
-                        order?.status === "Pending" && "bg-amber-500"
-                      } ${order?.status === "Shipped" && "bg-green-500"}`}
-                    >
-                      {order?.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+          {isFetching || isLoading ? (
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (!isFetching || !isLoading) && orders.length === 0 ? (
+            <NotFoundItem title="No Orders" />
+          ) : (
+            <TableBody>
+              {orders &&
+                orders.map((order: any, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell className="font-medium">
+                      {order?.products?.map((product: any) => (
+                        <p key={product?._id}>{product?.product?.name}</p>
+                      ))}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {order?.products?.map((product: any) => (
+                        <p key={product?._id}>{product?.quantity}</p>
+                      ))}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {order?.products?.map((product: any) => (
+                        <p key={product?._id}>{product?.product?.price}$</p>
+                      ))}
+                    </TableCell>
+                    <TableCell>{order?.totalPrice}$</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${
+                          order?.status === "Pending" && "bg-amber-500"
+                        } ${order?.status === "Shipped" && "bg-green-500"}`}
+                      >
+                        {order?.status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          )}
         </Table>
       </Card>
     </div>

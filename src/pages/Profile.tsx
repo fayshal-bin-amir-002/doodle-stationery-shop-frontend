@@ -1,5 +1,6 @@
 import DoodleForm from "@/components/form/DoodleForm";
 import DoodleInput from "@/components/form/DoodleInput";
+import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 import Container from "@/components/shared/Container";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -21,10 +22,6 @@ const Profile = () => {
     shippingAddress: data?.data?.shippingAddress,
   };
 
-  if (isFetching || loading1) {
-    return;
-  }
-
   const handleSubmit: SubmitHandler<FieldValues> = async (data) => {
     const updatedData = {
       shippingAddress: data.shippingAddress,
@@ -36,6 +33,10 @@ const Profile = () => {
       toast.error(err?.data?.message || "Something went wrong");
     }
   };
+
+  if (loading1 || isFetching) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Container>
@@ -54,7 +55,9 @@ const Profile = () => {
               label="Shipping Address"
               type="text"
             />
-            <Button type="submit">Update Profile</Button>
+            <Button type="submit" disabled={loading2}>
+              Update Profile
+            </Button>
           </DoodleForm>
         </Card>
       </div>

@@ -44,27 +44,6 @@ const Products = () => {
     setPage(1);
   };
 
-  let content = null;
-
-  if (isFetching || isLoading) {
-    content = <ProductCardSkeleton />;
-  }
-
-  if (!isLoading && products.length === 0) {
-    content = <NotFoundItem title="Products not found" />;
-  }
-
-  if (!isLoading && products.length > 0) {
-    content = (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-        {products &&
-          products.map((product: any) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-      </div>
-    );
-  }
-
   return (
     <div className="my-8 md:my-10 lg:my-12">
       <Container>
@@ -91,7 +70,21 @@ const Products = () => {
             />
           </div>
         </div>
-        <div>{content}</div>
+        <div>
+          {/* products will be here */}
+          {isFetching || isLoading ? (
+            <ProductCardSkeleton />
+          ) : !isLoading && !isFetching && products.length === 0 ? (
+            <NotFoundItem title="Products not found" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+              {products &&
+                products.map((product: any) => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+            </div>
+          )}
+        </div>
         {products.length > 0 && (
           <div className="my-5 flex justify-center items-center">
             <Pagination>

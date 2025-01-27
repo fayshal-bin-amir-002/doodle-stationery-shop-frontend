@@ -14,9 +14,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import TableLoader from "@/components/Loader/TableLoader";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const ManageUsers = () => {
-  const { data } = useGetAllUsersQuery(undefined);
+  const { data, isLoading, isFetching } = useGetAllUsersQuery(undefined);
   const [blockUser] = useBlockUserMutation();
 
   const users = data?.data?.data || [];
@@ -43,39 +45,63 @@ const ManageUsers = () => {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {users &&
-              users.map((user: any, i: number) => (
-                <TableRow key={i} className="">
-                  <TableCell>{user?.name}</TableCell>
-                  <TableCell>{user?.email}</TableCell>
-                  <TableCell>
-                    {user?.role === "admin" ? (
-                      <Badge>{user?.role}</Badge>
-                    ) : (
-                      user?.role
-                    )}
-                  </TableCell>
-                  <TableCell
-                    className={`${
-                      user?.isBlocked ? "text-red-500" : "text-green-500"
-                    }`}
-                  >
-                    {user?.isBlocked ? "Blocked" : "Active"}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      onClick={() => handleBlock(user?.email)}
-                      disabled={user?.isBlocked}
-                      className="bg-red-500"
+          {isFetching || isLoading ? (
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+                <TableCell>
+                  <TableLoader />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (!isFetching || !isLoading) && users.length === 0 ? (
+            <NotFoundItem title="No Orders" />
+          ) : (
+            <TableBody>
+              {users &&
+                users.map((user: any, i: number) => (
+                  <TableRow key={i} className="">
+                    <TableCell>{user?.name}</TableCell>
+                    <TableCell>{user?.email}</TableCell>
+                    <TableCell>
+                      {user?.role === "admin" ? (
+                        <Badge>{user?.role}</Badge>
+                      ) : (
+                        user?.role
+                      )}
+                    </TableCell>
+                    <TableCell
+                      className={`${
+                        user?.isBlocked ? "text-red-500" : "text-green-500"
+                      }`}
                     >
-                      Block
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
+                      {user?.isBlocked ? "Blocked" : "Active"}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        onClick={() => handleBlock(user?.email)}
+                        disabled={user?.isBlocked}
+                        className="bg-red-500"
+                      >
+                        Block
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          )}
         </Table>
       </Card>
     </div>

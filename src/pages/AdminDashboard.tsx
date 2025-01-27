@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/chart";
 
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 
 const colors = [
   "#FF5733", // Vibrant Red
@@ -18,7 +19,7 @@ const colors = [
 ];
 
 const AdminDashboard = () => {
-  const { data } = useGetDashboardDataQuery(undefined);
+  const { data, isLoading, isFetching } = useGetDashboardDataQuery(undefined);
 
   const mostSoldItem = data?.data?.mostSoldItem || [];
   const orderSummary = data?.data?.orderSummary || {};
@@ -47,6 +48,10 @@ const AdminDashboard = () => {
     }
   );
 
+  if (isLoading || isFetching) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 lg:gap-6">
@@ -60,7 +65,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <h3 className="text-3xl font-semibold mb-1">
-              {orderSummary?.totalRevenue}$
+              {orderSummary?.totalRevenue || "No data available"}$
             </h3>
           </CardContent>
         </Card>
@@ -74,7 +79,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <h3 className="text-3xl font-semibold mb-1 text-blue-500">
-              {orderSummary?.totalOrders}
+              {orderSummary?.totalOrders || "No data available"}
             </h3>
           </CardContent>
         </Card>
@@ -88,7 +93,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <h3 className="text-3xl font-semibold mb-1 text-green-500">
-              {orderSummary?.shippedOrders}
+              {orderSummary?.shippedOrders || "No data available"}
             </h3>
           </CardContent>
         </Card>
@@ -96,13 +101,13 @@ const AdminDashboard = () => {
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle className="text-lg">Total Shipped Orders</CardTitle>
+              <CardTitle className="text-lg">Total Pending Orders</CardTitle>
               <ListOrdered size={18} color="#756c6c" />
             </div>
           </CardHeader>
           <CardContent>
             <h3 className="text-3xl font-semibold mb-1 text-amber-500">
-              {orderSummary?.pendingOrders}
+              {orderSummary?.pendingOrders || "No data available"}
             </h3>
           </CardContent>
         </Card>
