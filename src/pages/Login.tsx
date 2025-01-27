@@ -59,11 +59,6 @@ const Login = () => {
     return <Navigate to="/"></Navigate>;
   }
 
-  const defaultValues = {
-    email: "user1@gmail.com",
-    password: "user123",
-  };
-
   return (
     <div className="w-full h-[80vh] flex justify-center items-center">
       <div className="max-w-sm w-full">
@@ -81,10 +76,7 @@ const Login = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <DoodleForm
-                  onSubmit={handleLogin}
-                  defaultValues={defaultValues}
-                >
+                <DoodleForm onSubmit={handleLogin}>
                   <DoodleInput name="email" label="Email" type="text" />
                   <DoodleInput
                     name="password"
