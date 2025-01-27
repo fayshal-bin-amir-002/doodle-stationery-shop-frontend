@@ -234,7 +234,7 @@ const CartSheet = ({ itemCount }: { itemCount: number }) => {
                 </Card>
               ))}
             </div>
-            <div>
+            <div className="mt-12">
               <Card>
                 <CardContent className="space-y-3 mt-6">
                   <p>Total Quantity: {cart?.totalQuantity}</p>
