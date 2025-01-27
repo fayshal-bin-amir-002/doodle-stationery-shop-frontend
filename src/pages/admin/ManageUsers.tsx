@@ -18,7 +18,9 @@ import TableLoader from "@/components/Loader/TableLoader";
 import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const ManageUsers = () => {
-  const { data, isLoading, isFetching } = useGetAllUsersQuery(undefined);
+  const { data, isLoading, isFetching } = useGetAllUsersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [blockUser] = useBlockUserMutation();
 
   const users = data?.data?.data || [];

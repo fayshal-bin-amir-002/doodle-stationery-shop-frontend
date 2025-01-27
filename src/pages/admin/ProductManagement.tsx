@@ -58,10 +58,15 @@ const categories = [
 const ProductManagement = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { data, isLoading, isFetching } = useGetAllProductsQuery({
-    page,
-    search,
-  });
+  const { data, isLoading, isFetching } = useGetAllProductsQuery(
+    {
+      page,
+      search,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const [deleteProduct] = useDeleteProductMutation();
   const products = data?.data?.data || [];
   const meta = data?.data?.meta || {};

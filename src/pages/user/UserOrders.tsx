@@ -14,7 +14,9 @@ import TableLoader from "@/components/Loader/TableLoader";
 import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const UserOrders = () => {
-  const { data, isLoading, isFetching } = useMyOdersQuery(undefined);
+  const { data, isLoading, isFetching } = useMyOdersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const orders = data?.data?.data || [];
 

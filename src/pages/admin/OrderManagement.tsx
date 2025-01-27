@@ -19,7 +19,9 @@ import TableLoader from "@/components/Loader/TableLoader";
 import NotFoundItem from "@/components/shared/NotFoundItem";
 
 const OrderManagement = () => {
-  const { data, isLoading, isFetching } = useGetAllOrdersQuery(undefined);
+  const { data, isLoading, isFetching } = useGetAllOrdersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [approveOrder] = useApproveOrderMutation();
 
   const orders = data?.data?.data || [];

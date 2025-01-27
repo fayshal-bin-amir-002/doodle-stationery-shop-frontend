@@ -26,11 +26,16 @@ const Products = () => {
     category: "",
     instock: "",
   });
-  const { data, isLoading, isFetching } = useGetAllProductsQuery({
-    page,
-    search,
-    filterData,
-  });
+  const { data, isLoading, isFetching } = useGetAllProductsQuery(
+    {
+      page,
+      search,
+      filterData,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const products = data?.data?.data || [];
   const meta = data?.data?.meta || {};
   const pageNumbers = Array.from(

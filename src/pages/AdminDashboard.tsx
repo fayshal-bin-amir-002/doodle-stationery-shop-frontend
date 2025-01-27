@@ -19,7 +19,9 @@ const colors = [
 ];
 
 const AdminDashboard = () => {
-  const { data, isLoading, isFetching } = useGetDashboardDataQuery(undefined);
+  const { data, isLoading, isFetching } = useGetDashboardDataQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const mostSoldItem = data?.data?.mostSoldItem || [];
   const orderSummary = data?.data?.orderSummary || {};
