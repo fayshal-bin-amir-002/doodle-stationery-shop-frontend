@@ -3,7 +3,7 @@ import { RootState } from "../store";
 import { logout } from "../features/auth/authSlice"; // Import your logout action
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:9000/api",
+  baseUrl: "https://doodle-stationery-shop-backend.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
