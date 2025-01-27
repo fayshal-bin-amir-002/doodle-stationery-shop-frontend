@@ -1,4 +1,6 @@
+import LoadingSpinner from "@/components/Loader/LoadingSpinner";
 import Container from "@/components/shared/Container";
+import NotFoundItem from "@/components/shared/NotFoundItem";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
@@ -13,7 +15,7 @@ const Product = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data } = useGetAProductQuery(id, {
+  const { data, isLoading, isFetching } = useGetAProductQuery(id, {
     skip: !id,
   });
 
@@ -35,6 +37,14 @@ const Product = () => {
       })
     );
   };
+
+  if (isLoading || isFetching) {
+    return <LoadingSpinner />;
+  }
+
+  if ((!isLoading || !isFetching) && !product) {
+    return <NotFoundItem title="Product not Found" />;
+  }
 
   return (
     <div className="my-12 md:my-16 lg:my-20">
